@@ -1,1 +1,2 @@
 CONFIG_TARGET_atheros=y
+CONFIG_CMDLINE="rootfstype=squashfs,jffs2"

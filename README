@@ -1,28 +1,33 @@
-The sudo mesh firmware builder.
 
-NOTICE: This is still a work in progress. Don't expect it to work.
+This is a fork of sudomesh firmware. 
 
-Only contains patches and build scripts. 
+The goal is to create a firmware for mapping wifi channel usage and general speectrum usage.
 
-What the prepare script does:
+Features of this firmware:
 
-1. Downloads OpenWRT
+* Serial console output is disabled as much as possible
+** To allow direct hookup of GPS receiver via serial.
+* Only configured for ar71xx and atheros chips.
+* Spectral analysis is only available on ar71xx (hardware limitation)
 
-2. Patches OpenWRT with sudo mesh patches (actually we don't yet have any patches).
+sudo mesh is working on both a bike and car mountable rig for spectrum analysis:
 
-3. Adds a feed to get OpenWRT to pull in the sudomesh/openwrt-packages feed from github. 
-The openwrt-packages contains references to the code for the actual sudo mesh openwrt-packages 
-(that each have their own github repositories).
+*1x Ubiquiti Bullet 2 HP (for 2.4 ghz wifi channel scan)
+*1x Ubiquiti Bullet 5 HP (for 5 ghz wifi channel scan)
+*1x Ubiquiti Bullet M2 (for 2.4 ghz spectrum analysis)
+*1x Ubiquiti Bullet M5 (for 5 ghz spectrum analysis)
+*All bullets with high-gain omni antennas attached
+*Passive five-port ethernet hub with PoE injection
+**http://www.zen22142.zen.co.uk/Circuits/Interface/pethhub.htm
+*Lithium-ion 12 volt battery pack.
+*One 3.3 volt GPS module with serial interface (e.g. Ublox Neo 6m)
+**http://dx.com/p/gy-neo6mv2-flight-controller-gps-module-blue-232595
 
-What the build_package script does:
+The GPS module can be connected to any one of the bullets via serial.
+It provides position and timestamp data.
+All nodes broadcast wifi/spectrum/gps/time information.
+All nodes log their own and all received info to a temporary file (in ram).
 
-Builds a single package for the specified platform, e.g.:
+Before battery runs out, some computer is plugged into the fifth ethernet port on the passive hub and uses scp to copy the temporary file into permanent storage.
 
-  build_package -a atheros internetisdownredirect 
 
-The built packages will end up in the built_packages/ directory
-
-What the build script does:
-
-Nothing right now, but in the future it will build OpenWRT firmwares for the target platforms 
-as specified in the openwrt/architectures file.
